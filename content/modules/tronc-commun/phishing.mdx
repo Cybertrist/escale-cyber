@@ -1,0 +1,104 @@
+---
+titre: Phishing
+resume: Repérer un mail piégé avant de cliquer.
+duree: 12
+ordre: 2
+---
+
+# Contexte
+
+La grande majorité des cyberattaques contre les entreprises commencent par un mail. Pas besoin de pirater un serveur quand on peut demander poliment à quelqu'un de cliquer.
+
+Un mail de phishing joue presque toujours sur les mêmes ressorts :
+
+- **l'urgence** : « avant 17h », « dernier rappel », « compte suspendu » ;
+- **l'autorité** : un directeur, un organisme officiel, un fournisseur connu ;
+- **l'imitation** : un logo copié, une adresse qui ressemble à la vraie à une lettre près.
+
+<Attention>
+Le lien affiché dans un mail peut être différent du lien réel. Survole-le avant de cliquer : l'adresse de destination apparaît en bas de la fenêtre.
+</Attention>
+
+# Simulation
+
+Tu es en 4A à l'ENSIBS. Trois mails viennent d'arriver. Pour chacun, décide : légitime ou phishing ?
+
+<FausseBoiteMail
+  boite="etud.univ-ubs.fr"
+  mails={[
+    {
+      de: "Service Scolarité UBS",
+      adresse: "scolarite@univ-ubs-etudiants.com",
+      heure: "09:14",
+      objet: "Action requise : validation de votre inscription",
+      corps: "Bonjour,\n\nSuite à une mise à jour de nos systèmes, votre inscription pour l'année 2026-2027 n'est pas finalisée.\n\nMerci de vous reconnecter avec vos identifiants universitaires sous 24h. Sans action de votre part, votre accès à l'ENT sera suspendu.\n\nLe service scolarité",
+      bouton: "Valider mon inscription",
+      phishing: true,
+      indices: [
+        "Le domaine « univ-ubs-etudiants.com » n'est pas celui de l'université.",
+        "Menace de suspension et délai de 24h : pression artificielle.",
+        "L'université ne demande jamais de ressaisir ses identifiants via un lien.",
+      ],
+    },
+    {
+      de: "Bibliothèque universitaire",
+      adresse: "bu@univ-ubs.fr",
+      heure: "08:30",
+      objet: "Rappel : retour de l'ouvrage « Automatique industrielle »",
+      corps: "Bonjour,\n\nL'ouvrage « Automatique industrielle » emprunté le 2 septembre est à rendre avant le 14 octobre.\n\nVous pouvez prolonger l'emprunt depuis votre compte lecteur sur le site de la BU.\n\nBonne journée,\nLa BU de Lorient",
+      phishing: false,
+      indices: [
+        "Adresse du vrai domaine de l'université.",
+        "Aucun lien à cliquer, aucune demande d'identifiants.",
+        "Le contenu correspond à un emprunt réel et renvoie vers le site habituel.",
+      ],
+    },
+    {
+      de: "Direction ENSIBS",
+      adresse: "directeur.ensibs@gmail.com",
+      heure: "Hier",
+      objet: "Petit service discret",
+      corps: "Bonjour,\n\nJe suis en réunion toute la journée et j'ai besoin que vous m'achetiez quatre cartes cadeaux de 100 € pour les intervenants du séminaire.\n\nEnvoyez-moi les codes par retour de mail, je vous rembourse dès demain. Merci de rester discret, c'est une surprise.\n\nCordialement",
+      phishing: true,
+      indices: [
+        "Une direction n'écrit pas depuis une adresse Gmail.",
+        "Demande inhabituelle, urgente et « discrète » : c'est la fraude au président.",
+        "Les cartes cadeaux sont intraçables : c'est le moyen de paiement préféré des escrocs.",
+      ],
+    },
+  ]}
+/>
+
+# Quiz
+
+<Quiz
+  questions={[
+    {
+      question: "Quel est le premier élément à vérifier dans un mail inattendu ?",
+      choix: ["Le logo", "L'adresse exacte de l'expéditeur", "La signature", "L'heure d'envoi"],
+      bonne: 1,
+      explication: "Le logo et la signature se copient en deux secondes. Le domaine de l'adresse est bien plus difficile à imiter parfaitement.",
+    },
+    {
+      question: "Tu as cliqué sur un lien et saisi ton mot de passe avant de réaliser que c'était un piège. Que fais-tu ?",
+      choix: ["Rien, personne ne le saura", "Je change mon mot de passe et je préviens tout de suite le service informatique", "J'attends de voir s'il se passe quelque chose", "Je supprime le mail"],
+      bonne: 1,
+      explication: "Plus l'alerte est rapide, plus les dégâts sont limités. Personne ne te reprochera d'avoir signalé ton erreur.",
+    },
+    {
+      question: "Un mail de ton responsable te demande un virement urgent vers un nouveau compte. Tu…",
+      choix: ["Fais le virement, c'est ton responsable", "Réponds au mail pour confirmer", "L'appelles sur son numéro habituel pour vérifier", "Transfères le mail à un collègue"],
+      bonne: 2,
+      explication: "Vérifie toujours par un autre canal que celui du mail. Répondre au mail, c'est répondre à l'escroc.",
+    },
+  ]}
+/>
+
+# Fiche réflexe
+
+<Fiche titre="Phishing : les 4 réflexes">
+1. **Vérifie l'expéditeur** : le domaine complet, lettre par lettre.
+2. **Méfie-toi de l'urgence** et des demandes inhabituelles.
+3. **Vérifie par un autre canal** : téléphone, en personne.
+4. **Signale plutôt que supprimer** : ton signalement protège aussi les autres.
+</Fiche>

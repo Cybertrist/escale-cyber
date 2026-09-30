@@ -1,0 +1,102 @@
+---
+titre: Le faux maître d'ouvrage
+resume: Des demandes pressantes qui semblent venir du client.
+duree: 12
+ordre: 2
+---
+
+# Contexte
+
+Sur un chantier, les échanges avec le **maître d'ouvrage** (le client) sont constants : situations de travaux, avenants, validations, réceptions. Les montants en jeu sont élevés et les délais toujours serrés.
+
+Les escrocs s'en servent : ils imitent le client, l'architecte ou un sous-traitant pour détourner un paiement ou obtenir des documents. Ils choisissent souvent un moment de forte pression, comme la veille d'une réception ou une fin de mois.
+
+# Simulation
+
+Tu es conducteur de travaux. Trois mails concernent ton chantier. Lesquels sont des pièges ?
+
+<FausseBoiteMail
+  boite="chantier-mediatheque"
+  mails={[
+    {
+      de: "Mairie de Lorient · Services techniques",
+      adresse: "services.techniques@lorient-mairie.org",
+      heure: "10:02",
+      objet: "Avenant n°3 à signer avant ce soir",
+      corps: "Bonjour,\n\nSuite à la réunion de chantier, l'avenant n°3 est à signer électroniquement avant 18h, faute de quoi le paiement de la situation de travaux de ce mois sera reporté.\n\nConnectez-vous avec vos identifiants de messagerie pour accéder au document.\n\nCordialement",
+      bouton: "Signer l'avenant",
+      phishing: true,
+      indices: [
+        "« lorient-mairie.org » n'est pas le domaine officiel de la ville.",
+        "Chantage au paiement et délai de quelques heures : pression artificielle.",
+        "Une signature électronique ne demande jamais tes identifiants de messagerie.",
+      ],
+    },
+    {
+      de: "Cabinet Archi Ouest",
+      adresse: "j.perrot@archi-ouest.fr",
+      heure: "08:45",
+      objet: "CR réunion de chantier n°14",
+      corps: "Bonjour à tous,\n\nVous trouverez ci-dessous le compte-rendu de la réunion de chantier n°14 de jeudi. Points principaux : reprise des réservations au R+1, livraison des menuiseries décalée d'une semaine.\n\nMerci de me faire part de vos remarques avant mardi.\n\nJ. Perrot",
+      phishing: false,
+      indices: [
+        "L'architecte habituel, depuis son adresse habituelle.",
+        "Contenu cohérent avec la réunion réellement tenue.",
+        "Aucune demande de paiement, de lien ou d'identifiants.",
+      ],
+    },
+    {
+      de: "Bati Sous-Traitance",
+      adresse: "facturation@bati-soustraitance.fr",
+      heure: "Hier",
+      objet: "Nouveau compte bancaire pour nos factures",
+      corps: "Bonjour,\n\nNotre société change d'établissement bancaire. Merci de mettre à jour notre RIB (en pièce jointe) avant le règlement de la facture de fin de mois.\n\nPour toute question, contactez notre nouveau service comptable au 06 12 34 56 78.\n\nCordialement",
+      pieceJointe: "RIB_BatiST_2026.pdf",
+      phishing: true,
+      indices: [
+        "Changement de RIB juste avant un règlement : scénario classique de fraude.",
+        "Le numéro fourni est celui de l'escroc. Il faut appeler le numéro déjà connu.",
+        "Même si l'adresse semble correcte, la boîte mail du sous-traitant peut avoir été piratée.",
+      ],
+    },
+  ]}
+/>
+
+# Quiz
+
+<Quiz
+  questions={[
+    {
+      question: "Un mail du « client » exige une signature avant ce soir sous peine de retard de paiement. Tu…",
+      choix: ["Signes vite pour ne pas retarder le paiement", "Vérifies auprès de ton interlocuteur habituel, par téléphone", "Transfères au sous-traitant", "Réponds au mail pour demander un délai"],
+      bonne: 1,
+      explication: "La pression sur le paiement est un levier classique. Un vrai client accepte une vérification.",
+    },
+    {
+      question: "Le mail d'un sous-traitant connu, depuis son adresse habituelle, demande un changement de RIB. C'est forcément fiable ?",
+      choix: ["Oui, l'adresse est la bonne", "Non, sa boîte mail a pu être piratée : on vérifie par téléphone", "Oui, s'il y a un logo", "Oui, si le PDF s'ouvre"],
+      bonne: 1,
+      explication: "Les escrocs utilisent souvent de vraies boîtes piratées. L'adresse correcte ne suffit pas.",
+    },
+    {
+      question: "Pourquoi les escrocs agissent-ils la veille d'une échéance ?",
+      choix: ["Parce que la pression pousse à agir sans vérifier", "Parce que les banques sont fermées", "Par hasard", "Parce que les mails arrivent plus vite"],
+      bonne: 0,
+      explication: "Moins tu as de temps, moins tu vérifies. C'est exactement ce qu'ils cherchent.",
+    },
+    {
+      question: "Quelle règle interne protège le mieux contre la fraude au virement ?",
+      choix: ["Un seul signataire pour aller plus vite", "La double validation et le contre-appel systématique pour tout changement de RIB", "Payer uniquement par chèque", "Aucune"],
+      bonne: 1,
+      explication: "Deux personnes et un contre-appel : c'est simple, et ça bloque la grande majorité des fraudes.",
+    },
+  ]}
+/>
+
+# Fiche réflexe
+
+<Fiche titre="Échanges de chantier : les 3 réflexes">
+1. **Pression sur un paiement ou une signature = vérification**, par téléphone, au numéro connu.
+2. **Changement de RIB = contre-appel systématique**, même depuis une adresse connue.
+3. **Jamais tes identifiants** pour accéder à un document.
+</Fiche>

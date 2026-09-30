@@ -1,0 +1,94 @@
+---
+titre: La supervision exposée
+resume: L'écran de supervision de la chaufferie est accessible depuis Internet.
+duree: 12
+ordre: 1
+---
+
+# Contexte
+
+Tu es ingénieur·e d'exploitation pour un réseau de chaleur urbain. La chaufferie biomasse, les sous-stations et les pompes sont pilotées depuis une **supervision** (SCADA) : un écran qui affiche les températures, les débits, et permet d'envoyer des consignes.
+
+Pour pouvoir surveiller le réseau le week-end depuis chez lui, un collègue a rendu la supervision accessible depuis Internet, « juste le temps de l'hiver ».
+
+En 2021, la ville d'Oldsmar, en Floride, a annoncé qu'un intrus avait pris la main à distance sur la supervision de sa station de traitement d'eau pour multiplier par plus de cent la dose de soude. Un opérateur a vu le curseur bouger et a corrigé la consigne. L'enquête a ensuite évoqué une possible erreur interne, mais la leçon reste la même : la supervision était joignable à distance, avec un logiciel partagé par toute l'équipe.
+
+<Attention>
+Une supervision industrielle ne doit **jamais** être exposée directement sur Internet. Un accès distant passe par un VPN avec double facteur, ouvert à la demande.
+</Attention>
+
+# Simulation
+
+<Scenario
+  noeuds={{
+    debut: {
+      texte: "Lundi matin, en consultant le journal de la supervision, tu vois des tentatives de connexion la nuit depuis des adresses étrangères. L'une d'elles a réussi à 3h12.",
+      choix: [
+        { label: "Je préviens mon responsable et le référent cyber, et je demande de couper l'accès Internet", suivant: "alerte" },
+        { label: "Je change le mot de passe moi-même et je n'en parle à personne pour ne pas faire d'histoires", suivant: "seul" },
+        { label: "Les consignes n'ont pas bougé, ce n'est probablement rien", suivant: "fin_mauvaise" },
+      ],
+    },
+    alerte: {
+      texte: "Le référent cyber demande de ne rien effacer et de relever les consignes actuelles de toutes les sous-stations.",
+      choix: [
+        { label: "Je relève les consignes et je les compare aux valeurs de référence de l'exploitation", suivant: "fin_bonne" },
+        { label: "Je redémarre la supervision pour repartir sur une base propre", suivant: "fin_moyenne" },
+      ],
+    },
+    seul: {
+      texte: "Deux semaines plus tard, les températures de départ d'une sous-station dérivent lentement. La consigne a été modifiée la nuit de l'intrusion.",
+      choix: [{ label: "Voir le bilan", suivant: "fin_mauvaise2" }],
+    },
+    fin_bonne: { fin: "bon", bilan: "Une consigne de sous-station avait été modifiée. Grâce à l'alerte rapide et aux valeurs de référence, elle est corrigée avant tout impact sur les usagers." },
+    fin_moyenne: { fin: "moyen", bilan: "L'alerte était la bonne décision. Mais redémarrer efface des traces utiles à l'analyse : on préserve d'abord, on nettoie ensuite." },
+    fin_mauvaise: { fin: "mauvais", bilan: "Une connexion réussie d'origine inconnue est un incident, même si rien ne semble avoir changé. L'intrus peut revenir, ou avoir modifié ce que tu ne regardes pas." },
+    fin_mauvaise2: { fin: "mauvais", bilan: "Changer le mot de passe seul ne dit pas ce que l'intrus a fait. Sans alerte, personne n'a vérifié les consignes." },
+  }}
+/>
+
+# Quiz
+
+<Quiz
+  questions={[
+    {
+      question: "Qu'est-ce qu'une supervision (SCADA) ?",
+      choix: ["Un logiciel de comptabilité", "Le système qui affiche l'état d'une installation et permet de la piloter", "Un antivirus industriel", "Un tableau Excel partagé"],
+      bonne: 1,
+      explication: "C'est le poste de pilotage de l'installation : y accéder, c'est pouvoir agir sur le réel.",
+    },
+    {
+      question: "Comment rendre une supervision accessible à distance de façon sûre ?",
+      choix: ["L'ouvrir sur Internet avec un bon mot de passe", "Via un VPN avec double facteur, ouvert à la demande", "Via un logiciel de prise en main gratuit", "En changeant le port par défaut"],
+      bonne: 1,
+      explication: "Changer de port ne cache rien : les scanners d'Internet testent tous les ports.",
+    },
+    {
+      question: "Tu détectes une connexion réussie suspecte. Que faut-il préserver ?",
+      choix: ["Rien, il faut tout redémarrer", "Les journaux et l'état actuel des consignes", "Uniquement les sauvegardes de la veille", "Les mails de l'équipe"],
+      bonne: 1,
+      explication: "Ce sont les indices qui permettront de savoir ce qui a été touché.",
+    },
+    {
+      question: "Qu'a montré l'incident d'Oldsmar en 2021 ?",
+      choix: ["Qu'une supervision joignable à distance permet de modifier un procédé dangereux", "Que les stations d'eau ne sont pas informatisées", "Que les pirates ne visent que les banques", "Que les écrans de supervision sont inutiles"],
+      bonne: 0,
+      explication: "Quelle que soit l'origine exacte, une consigne dangereuse a pu être envoyée à distance ; la vigilance de l'opérateur a évité le pire.",
+    },
+    {
+      question: "Qui doit être prévenu en premier ?",
+      choix: ["Personne, pour éviter la panique", "Ton responsable et le référent cyber", "Les usagers du réseau de chaleur", "Le fournisseur de la supervision uniquement"],
+      bonne: 1,
+      explication: "Ce sont eux qui déclenchent la réponse à incident et décident qui impliquer ensuite.",
+    },
+  ]}
+/>
+
+# Fiche réflexe
+
+<Fiche titre="Supervision : les 4 réflexes">
+1. **Jamais de supervision exposée sur Internet.** Accès distant = VPN + double facteur.
+2. **Une connexion inexpliquée est un incident**, même si « rien n'a bougé ».
+3. **On préserve les traces** : journaux, consignes, captures d'écran.
+4. **On alerte tout de suite** son responsable et le référent cyber.
+</Fiche>

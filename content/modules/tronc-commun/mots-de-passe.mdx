@@ -1,0 +1,94 @@
+---
+titre: Mots de passe
+resume: Gestionnaire, phrase de passe et double facteur.
+duree: 10
+ordre: 1
+---
+
+# Contexte
+
+Premier jour de stage dans un bureau d'études. On te crée six comptes : messagerie, ERP, logiciel de CAO, plateforme fournisseur, VPN et badge. Ton tuteur te glisse : « Mets le même partout, ce sera plus simple ».
+
+C'est justement ce que cherchent les attaquants. Chaque année, des milliards d'identifiants fuitent de sites piratés. Ils sont ensuite essayés automatiquement sur d'autres services : c'est le **credential stuffing**. Un seul mot de passe réutilisé, et c'est toute la chaîne qui tombe.
+
+<Astuce>
+Un bon mot de passe est **long** plus que compliqué. `Marée-haute-sur-le-quai-de-Lorient-2027` résiste bien mieux que `P@ssw0rd!`.
+</Astuce>
+
+# Simulation
+
+<Scenario
+  noeuds={{
+    debut: {
+      texte: "Tu dois choisir le mot de passe de ton compte ERP. Tu utilises déjà « Lorient56! » pour ta messagerie personnelle.",
+      choix: [
+        { label: "Je reprends « Lorient56! », je suis sûr de m'en souvenir", suivant: "reutilise" },
+        { label: "J'installe le gestionnaire de mots de passe recommandé par l'école", suivant: "gestionnaire" },
+        { label: "Je l'écris sur un post-it collé sous le clavier", suivant: "postit" },
+      ],
+    },
+    reutilise: {
+      texte: "Trois mois plus tard, le site de ton club de sport est piraté. Ton adresse et « Lorient56! » circulent sur un forum. Un script essaie automatiquement ce couple sur le portail de l'entreprise…",
+      choix: [
+        { label: "Je n'ai rien vu passer, je ne fais rien", suivant: "fin_mauvaise" },
+        { label: "Le service informatique m'impose le double facteur à ce moment-là", suivant: "fin_moyenne" },
+      ],
+    },
+    gestionnaire: {
+      texte: "Le gestionnaire génère un mot de passe unique pour chaque compte. Il te reste à choisir le mot de passe maître qui protège le coffre.",
+      choix: [
+        { label: "Une phrase de passe longue que je suis seul à connaître, plus le double facteur", suivant: "fin_bonne" },
+        { label: "« Lorient56! », puisque c'est le seul à retenir", suivant: "fin_moyenne2" },
+      ],
+    },
+    postit: {
+      texte: "Un prestataire de ménage, un visiteur, un collègue d'un autre service : tout le monde passe devant ton bureau. Le post-it est photographié.",
+      choix: [{ label: "Voir la suite", suivant: "fin_mauvaise2" }],
+    },
+    fin_bonne: { fin: "bon", bilan: "Chaque compte a son mot de passe, le coffre est protégé par une phrase longue et un second facteur. Une fuite n'ouvre qu'une seule porte." },
+    fin_moyenne: { fin: "moyen", bilan: "Le double facteur a bloqué l'intrusion, mais ton mot de passe réutilisé reste exposé partout ailleurs. Change-le sur tous les comptes." },
+    fin_moyenne2: { fin: "moyen", bilan: "Bonne idée, le gestionnaire. Mais le coffre est protégé par un mot de passe déjà connu : c'est lui qu'il faut rendre unique et long." },
+    fin_mauvaise: { fin: "mauvais", bilan: "L'attaquant est dans l'ERP avec ton identité. Commandes, fournisseurs, données clients : tout ce que tu peux faire, il peut le faire." },
+    fin_mauvaise2: { fin: "mauvais", bilan: "Un mot de passe écrit en clair près du poste, c'est un mot de passe partagé avec tous ceux qui passent." },
+  }}
+/>
+
+# Quiz
+
+<Quiz
+  questions={[
+    {
+      question: "Quel mot de passe résiste le mieux à une attaque automatisée ?",
+      choix: ["P@ssw0rd!", "Lorient2027", "grue-orange-dans-le-brouillard-du-matin", "Azerty123$"],
+      bonne: 2,
+      explication: "La longueur compte plus que les symboles. Une phrase de passe de plusieurs mots est longue et facile à retenir.",
+    },
+    {
+      question: "Pourquoi ne faut-il pas réutiliser un mot de passe ?",
+      choix: ["Parce que c'est interdit par la loi", "Parce qu'une fuite sur un site permet d'ouvrir tous les autres comptes", "Parce que les mots de passe expirent", "Ça ne pose aucun problème s'il est complexe"],
+      bonne: 1,
+      explication: "Les identifiants volés sont testés automatiquement sur des centaines de services : c'est le credential stuffing.",
+    },
+    {
+      question: "À quoi sert le double facteur (MFA) ?",
+      choix: ["À changer de mot de passe plus souvent", "À exiger une seconde preuve (application, clé) en plus du mot de passe", "À chiffrer le disque dur", "À partager un compte entre collègues"],
+      bonne: 1,
+      explication: "Même si ton mot de passe fuite, l'attaquant est bloqué sans ton téléphone ou ta clé physique.",
+    },
+    {
+      question: "Un collègue te demande ton mot de passe pour dépanner un dossier en ton absence. Tu…",
+      choix: ["Le lui donnes, c'est un collègue", "Le lui envoies par SMS", "Refuses et demandes au service informatique de lui donner un accès au dossier", "Le lui dictes au téléphone"],
+      bonne: 2,
+      explication: "Un mot de passe est personnel. Toute action faite avec ton compte t'est attribuée. Il existe des accès partagés ou délégués pour ça.",
+    },
+  ]}
+/>
+
+# Fiche réflexe
+
+<Fiche titre="Mots de passe : les 4 réflexes">
+1. **Un mot de passe différent par compte**, rangé dans un gestionnaire.
+2. **Une phrase de passe longue** pour le coffre et les comptes critiques.
+3. **Le double facteur partout où il existe**, en priorité sur la messagerie.
+4. **Jamais partagé**, ni par mail, ni par SMS, ni sur un post-it.
+</Fiche>

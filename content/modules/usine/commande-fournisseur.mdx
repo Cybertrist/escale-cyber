@@ -1,0 +1,106 @@
+---
+titre: La commande fournisseur piégée
+resume: Un fournisseur change de RIB juste avant un gros paiement. Vraiment ?
+duree: 12
+ordre: 1
+---
+
+# Contexte
+
+Tu es responsable approvisionnement dans une usine de pièces mécaniques à Lanester. Chaque mois, des dizaines de commandes partent vers vos fournisseurs : acier, visserie, outillage, pièces de rechange pour la ligne.
+
+C'est une cible idéale pour la **fraude au changement de RIB**. L'escroc se fait passer pour un fournisseur réel, souvent depuis une boîte mail piratée ou imitée, et annonce un « nouveau compte bancaire ». Le virement suivant part chez lui. Pour une PME industrielle, la perte se chiffre vite en dizaines de milliers d'euros.
+
+<Attention>
+Un changement de coordonnées bancaires se vérifie **toujours par téléphone**, au numéro que tu connais déjà. Jamais au numéro indiqué dans le mail qui annonce le changement.
+</Attention>
+
+# Simulation
+
+Lundi matin, trois mails de fournisseurs t'attendent. Lesquels sont des pièges ?
+
+<FausseBoiteMail
+  boite="appro.usine-lanester"
+  mails={[
+    {
+      de: "Aciers de Bretagne · Compta",
+      adresse: "comptabilite@aciers-bretagne.fr.invoice-portal.net",
+      heure: "08:12",
+      objet: "Changement de coordonnées bancaires – facture F-2291",
+      corps: "Bonjour,\n\nSuite à un changement de banque, merci d'utiliser dorénavant le RIB ci-joint pour le règlement de la facture F-2291 (48 320 € HT), échéance vendredi.\n\nL'ancien compte sera clôturé cette semaine, tout virement dessus serait rejeté.\n\nCordialement,\nService comptabilité",
+      pieceJointe: "Nouveau_RIB_AciersBretagne.pdf",
+      phishing: true,
+      indices: [
+        "Le vrai domaine est « aciers-bretagne.fr », mais l'adresse se termine en réalité par « invoice-portal.net ».",
+        "Changement de RIB juste avant une grosse échéance : c'est le scénario type de la fraude au virement.",
+        "La seule vérification valable : appeler le fournisseur au numéro déjà connu.",
+      ],
+    },
+    {
+      de: "Visserie Morbihan",
+      adresse: "commandes@visserie-morbihan.fr",
+      heure: "07:55",
+      objet: "Accusé de réception commande CMD-8841",
+      corps: "Bonjour,\n\nNous accusons réception de votre commande CMD-8841 (vis CHC M8, 2 000 pièces).\n\nLivraison prévue jeudi sur votre quai n°2, comme d'habitude.\n\nBien cordialement,\nL'équipe commandes",
+      phishing: false,
+      indices: [
+        "Adresse habituelle du fournisseur, référence de commande qui correspond à une vraie commande.",
+        "Aucune demande de paiement, de lien ou d'identifiants.",
+        "Informations cohérentes avec la relation habituelle (quai, délai).",
+      ],
+    },
+    {
+      de: "Portail Fournisseurs",
+      adresse: "no-reply@portail-achats-securise.com",
+      heure: "Hier",
+      objet: "Votre accès ERP expire aujourd'hui",
+      corps: "Bonjour,\n\nVotre mot de passe du portail achats expire aujourd'hui. Pour éviter le blocage de vos bons de commande en cours, reconnectez-vous et confirmez vos identifiants.\n\nCeci est un message automatique, merci de ne pas y répondre.",
+      bouton: "Renouveler mon accès",
+      phishing: true,
+      indices: [
+        "Domaine générique inconnu, qui n'appartient ni à l'usine ni à l'éditeur de l'ERP.",
+        "Menace de blocage de commandes : pression sur ton activité.",
+        "Un vrai renouvellement se fait en allant soi-même sur l'ERP, pas via un lien reçu.",
+      ],
+    },
+  ]}
+/>
+
+# Quiz
+
+<Quiz
+  questions={[
+    {
+      question: "Un fournisseur annonce un changement de RIB par mail. Que fais-tu ?",
+      choix: ["Je mets à jour le RIB dans l'ERP", "J'appelle le numéro indiqué dans le mail", "J'appelle le fournisseur au numéro déjà connu", "Je réponds au mail pour confirmation"],
+      bonne: 2,
+      explication: "Le numéro du mail peut être celui de l'escroc. Seul un canal déjà connu est fiable.",
+    },
+    {
+      question: "Pourquoi les escrocs visent-ils les services achats ?",
+      choix: ["Parce qu'ils ont les meilleurs ordinateurs", "Parce qu'ils déclenchent des paiements importants et réguliers", "Parce qu'ils n'ont pas d'antivirus", "Par hasard"],
+      bonne: 1,
+      explication: "Un seul virement détourné peut rapporter des dizaines de milliers d'euros.",
+    },
+    {
+      question: "Dans l'adresse « compta@aciers-bretagne.fr.invoice-portal.net », quel est le vrai domaine ?",
+      choix: ["aciers-bretagne.fr", "invoice-portal.net", "compta", "fr"],
+      bonne: 1,
+      explication: "Le domaine réel se lit à la fin de l'adresse. Tout ce qui précède peut être choisi librement par l'escroc.",
+    },
+    {
+      question: "Tu as un doute sur un mail de fournisseur, mais le paiement est urgent. Tu…",
+      choix: ["Payes quand même, la production ne doit pas s'arrêter", "Suspends et vérifies : l'urgence est justement un signal d'alerte", "Demandes à un stagiaire de s'en occuper", "Payes la moitié"],
+      bonne: 1,
+      explication: "L'urgence est l'arme principale de l'escroc. Un vrai fournisseur accepte un délai de vérification.",
+    },
+  ]}
+/>
+
+# Fiche réflexe
+
+<Fiche titre="Achats : les 3 réflexes">
+1. **Tout changement de RIB se vérifie par téléphone**, au numéro connu, avec une personne connue.
+2. **Lis le domaine en entier**, en partant de la fin.
+3. **L'urgence justifie une vérification**, jamais un raccourci.
+</Fiche>

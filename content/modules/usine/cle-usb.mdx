@@ -1,0 +1,84 @@
+---
+titre: La clé USB du parking
+resume: Une clé USB « Salaires 2026 » traîne près de l'entrée. Tu la branches ?
+duree: 10
+ordre: 2
+lab: poste-piege
+---
+
+# Contexte
+
+Déposer des clés USB piégées sur un parking d'entreprise est une technique ancienne… qui fonctionne toujours. Lors d'expériences menées sur des campus, près de la moitié des clés abandonnées ont été branchées par ceux qui les ont trouvées.
+
+Une clé peut contenir un fichier piégé, mais aussi se faire passer pour un **clavier** : dès qu'elle est branchée, elle « tape » des commandes à toute vitesse. Sur un poste d'atelier relié aux machines, l'impact peut aller jusqu'à l'arrêt de la ligne.
+
+# Simulation
+
+<Scenario
+  noeuds={{
+    debut: {
+      texte: "7h40, parking de l'usine. Tu ramasses une clé USB avec une étiquette manuscrite : « Salaires 2026 – confidentiel ». Le poste de contrôle qualité est juste à côté de ton bureau.",
+      choix: [
+        { label: "Je la branche sur le poste qualité pour savoir à qui elle appartient", suivant: "branche" },
+        { label: "Je la dépose au service informatique sans la brancher", suivant: "fin_bonne" },
+        { label: "Je la branche sur mon PC portable perso, pas sur celui de l'usine", suivant: "perso" },
+      ],
+    },
+    branche: {
+      texte: "Une fenêtre noire s'ouvre et se ferme en une seconde. Rien d'autre. Le dossier « Salaires » est vide.",
+      choix: [
+        { label: "Ce n'est rien, je jette la clé et je me remets au travail", suivant: "fin_mauvaise" },
+        { label: "Je débranche le poste du réseau et j'appelle tout de suite l'informatique", suivant: "fin_moyenne" },
+      ],
+    },
+    perso: {
+      texte: "Ton portable perso est celui que tu connectes au Wi-Fi de l'usine le midi, et sur lequel tu consultes ta messagerie professionnelle.",
+      choix: [{ label: "Voir la suite", suivant: "fin_mauvaise2" }],
+    },
+    fin_bonne: { fin: "bon", bilan: "Le service informatique l'analyse sur un poste isolé. C'était bien une clé piégée, déposée volontairement." },
+    fin_moyenne: { fin: "moyen", bilan: "La fenêtre noire était une commande automatique. En isolant le poste et en alertant vite, tu as limité la propagation. Mais il ne fallait pas la brancher." },
+    fin_mauvaise: { fin: "mauvais", bilan: "La commande a installé une porte dérobée. Trois semaines plus tard, un rançongiciel chiffre les postes de l'atelier et la ligne s'arrête." },
+    fin_mauvaise2: { fin: "mauvais", bilan: "Le poste perso est compromis, et avec lui ta messagerie pro et l'accès au Wi-Fi de l'usine. Perso ou pro, une clé inconnue ne se branche nulle part." },
+  }}
+/>
+
+<LabLauncher lab="poste-piege" />
+
+# Quiz
+
+<Quiz
+  questions={[
+    {
+      question: "Tu trouves une clé USB inconnue. Que fais-tu ?",
+      choix: ["Je la branche pour trouver son propriétaire", "Je la remets au service informatique sans la brancher", "Je la formate puis je la garde", "Je la branche sur un poste qui n'est pas important"],
+      bonne: 1,
+      explication: "Aucun poste « n'est pas important » : tous sont reliés au même réseau.",
+    },
+    {
+      question: "Pourquoi une clé USB peut-elle agir sans que tu ouvres de fichier ?",
+      choix: ["Elle ne peut pas", "Elle peut se faire passer pour un clavier et taper des commandes", "À cause du Bluetooth", "Parce que Windows est obsolète"],
+      bonne: 1,
+      explication: "Certaines clés imitent un clavier : l'ordinateur leur fait confiance d'office.",
+    },
+    {
+      question: "Une fenêtre s'ouvre et se ferme toute seule juste après avoir branché une clé. Le bon réflexe ?",
+      choix: ["Redémarrer et oublier", "Débrancher le poste du réseau et alerter l'informatique", "Lancer un antivirus et continuer", "Retirer la clé et la jeter"],
+      bonne: 1,
+      explication: "Isoler puis alerter : c'est ce qui limite la propagation.",
+    },
+    {
+      question: "Quelle mesure protège le mieux les postes d'atelier ?",
+      choix: ["Interdire les clés personnelles et utiliser une borne de décontamination", "Mettre un fond d'écran d'avertissement", "Coller les ports USB avec du scotch", "Aucune, les postes d'atelier ne sont pas visés"],
+      bonne: 0,
+      explication: "Une borne blanche analyse les supports avant tout usage sur le réseau industriel.",
+    },
+  ]}
+/>
+
+# Fiche réflexe
+
+<Fiche titre="Supports USB : les 3 réflexes">
+1. **Une clé inconnue ne se branche nulle part**, ni pro, ni perso.
+2. **Elle va au service informatique**, qui l'analyse sur un poste isolé.
+3. **Au moindre comportement bizarre : on isole le poste et on alerte.**
+</Fiche>

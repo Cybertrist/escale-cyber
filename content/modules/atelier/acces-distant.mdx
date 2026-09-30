@@ -1,0 +1,89 @@
+---
+titre: Le robot qui bouge tout seul
+resume: Accès distant, réseau à plat et robot pilotable depuis n'importe où.
+duree: 10
+ordre: 2
+lab: robot-distant
+---
+
+# Contexte
+
+Pour gagner du temps, beaucoup d'ateliers ouvrent un **accès distant** vers leurs robots et automates : le constructeur peut diagnostiquer une panne sans se déplacer. Pratique… tant que cet accès est bien fermé.
+
+Les problèmes classiques :
+
+- un logiciel de prise en main à distance **laissé ouvert en permanence** ;
+- un **mot de passe partagé** entre tous les techniciens depuis des années ;
+- un **réseau « à plat »** où les robots sont joignables depuis n'importe quel PC de bureau.
+
+Des moteurs de recherche spécialisés recensent chaque jour des milliers d'équipements industriels accessibles directement depuis Internet.
+
+# Simulation
+
+<Scenario
+  noeuds={{
+    debut: {
+      texte: "Mardi 14h. Le bras de palettisation effectue un mouvement que personne n'a programmé, puis s'arrête. Sur l'écran du pupitre, une icône de prise en main à distance est allumée.",
+      choix: [
+        { label: "J'appuie sur l'arrêt d'urgence, je sécurise la zone et je préviens mon responsable", suivant: "secu" },
+        { label: "Je relance le cycle, c'est sûrement un bug", suivant: "fin_mauvaise" },
+        { label: "J'appelle le constructeur pour savoir s'il est connecté", suivant: "constructeur" },
+      ],
+    },
+    secu: {
+      texte: "Zone sécurisée. Ton responsable demande ce qu'il faut faire de l'accès distant.",
+      choix: [
+        { label: "Couper l'accès distant et le laisser coupé jusqu'à l'analyse", suivant: "fin_bonne" },
+        { label: "Changer le mot de passe et rouvrir tout de suite pour ne pas bloquer le constructeur", suivant: "fin_moyenne" },
+      ],
+    },
+    constructeur: {
+      texte: "Le constructeur répond qu'aucun de ses techniciens n'est connecté. Pendant l'appel, le robot redémarre seul.",
+      choix: [{ label: "J'appuie sur l'arrêt d'urgence et je préviens mon responsable", suivant: "secu" }],
+    },
+    fin_bonne: { fin: "bon", bilan: "Sécurité des personnes d'abord, puis coupure de l'accès. L'analyse montrera que le mot de passe partagé avait fuité." },
+    fin_moyenne: { fin: "moyen", bilan: "Changer le mot de passe est utile, mais on ne sait pas encore comment l'intrus est entré. Rouvrir trop tôt, c'est peut-être lui rouvrir la porte." },
+    fin_mauvaise: { fin: "mauvais", bilan: "Un mouvement non commandé est d'abord un risque pour les personnes. Relancer sans comprendre, c'est laisser la main à quelqu'un d'autre." },
+  }}
+/>
+
+<LabLauncher lab="robot-distant" />
+
+# Quiz
+
+<Quiz
+  questions={[
+    {
+      question: "Un robot fait un mouvement inattendu. Première action ?",
+      choix: ["Relancer le cycle", "Mettre les personnes en sécurité (arrêt d'urgence)", "Redémarrer le PC de supervision", "Filmer la scène"],
+      bonne: 1,
+      explication: "Sur une machine, la sécurité des personnes passe avant tout, y compris avant l'enquête.",
+    },
+    {
+      question: "Quelle est la bonne pratique pour la télémaintenance ?",
+      choix: ["Accès ouvert en permanence pour gagner du temps", "Accès ouvert uniquement à la demande, pour une intervention prévue, avec un compte nominatif", "Un mot de passe commun à tous les techniciens", "Pas de mot de passe sur le réseau interne"],
+      bonne: 1,
+      explication: "On ouvre, on trace, on referme : chaque intervention est identifiée.",
+    },
+    {
+      question: "Qu'est-ce qu'un réseau « à plat » ?",
+      choix: ["Un réseau sans Wi-Fi", "Un réseau où tous les équipements, bureau et atelier, peuvent se joindre librement", "Un réseau très rapide", "Un réseau éteint"],
+      bonne: 1,
+      explication: "Il faut segmenter : le PC de la comptabilité n'a aucune raison de parler au robot.",
+    },
+    {
+      question: "Pourquoi un mot de passe partagé depuis des années est-il dangereux ?",
+      choix: ["Il finit par être connu d'anciens salariés et prestataires", "Il ralentit le robot", "Il est trop long", "Il n'y a aucun danger"],
+      bonne: 0,
+      explication: "Impossible de savoir qui le connaît encore, ni qui s'en est servi.",
+    },
+  ]}
+/>
+
+# Fiche réflexe
+
+<Fiche titre="Accès distant : les 3 réflexes">
+1. **Sécurité des personnes d'abord** : arrêt d'urgence, zone dégagée.
+2. **L'accès distant est fermé par défaut**, ouvert à la demande, avec un compte nominatif.
+3. **Signale toute prise de contrôle inexpliquée**, même si « tout est revenu à la normale ».
+</Fiche>

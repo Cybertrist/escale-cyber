@@ -1,0 +1,96 @@
+---
+titre: Le firmware du robot
+resume: Une mise à jour de firmware arrive par un canal inhabituel.
+duree: 12
+ordre: 1
+---
+
+# Contexte
+
+Dans un atelier robotisé, le **firmware** est le logiciel embarqué qui pilote directement les moteurs, les capteurs et les sécurités d'un robot ou d'un variateur. Le modifier, c'est modifier le comportement physique de la machine.
+
+En 2010, le ver **Stuxnet** a reprogrammé les automates de centrifugeuses iraniennes pour les faire tourner à des vitesses destructrices, tout en affichant des valeurs normales aux opérateurs. Il s'était introduit par des supports amovibles.
+
+Un firmware légitime est **signé** par le constructeur, et publié avec une **empreinte** (hash SHA-256) qui permet de vérifier que le fichier n'a pas été modifié.
+
+<Astuce>
+Vérifier une empreinte prend dix secondes : `certutil -hashfile fichier.bin SHA256` sous Windows, puis comparer avec la valeur publiée sur le site officiel du constructeur.
+</Astuce>
+
+# Simulation
+
+<Scenario
+  noeuds={{
+    debut: {
+      texte: "Le bras robotisé de la cellule de soudage présente des micro-arrêts. Un technicien de passage te tend une clé USB : « C'est le nouveau firmware v3.8, il corrige exactement ça. Je l'ai récupéré sur un forum de roboticiens. »",
+      choix: [
+        { label: "Je flashe le robot tout de suite, la production attend", suivant: "fin_mauvaise" },
+        { label: "Je télécharge moi-même la v3.8 sur le site officiel du constructeur", suivant: "officiel" },
+        { label: "Je compare le nom du fichier avec celui du site officiel", suivant: "nom" },
+      ],
+    },
+    officiel: {
+      texte: "Le site du constructeur publie bien une v3.8, avec son empreinte SHA-256. Avant de flasher :",
+      choix: [
+        { label: "Je vérifie l'empreinte, puis je planifie l'intervention avec le chef d'atelier", suivant: "fin_bonne" },
+        { label: "Je flashe directement, le fichier vient du site officiel", suivant: "fin_moyenne" },
+      ],
+    },
+    nom: {
+      texte: "Le nom est identique : « RC-Weld_fw_v3.8.bin ». Mais un nom de fichier se renomme en une seconde.",
+      choix: [
+        { label: "Ça suffit, je flashe", suivant: "fin_mauvaise" },
+        { label: "Je vais chercher le fichier et son empreinte sur le site officiel", suivant: "officiel" },
+      ],
+    },
+    fin_bonne: { fin: "bon", bilan: "Source officielle, empreinte vérifiée, intervention planifiée : c'est la procédure qui protège à la fois la sécurité et la production." },
+    fin_moyenne: { fin: "moyen", bilan: "La source est la bonne, mais sans vérifier l'empreinte tu ne sais pas si le téléchargement est intact. Et une intervention non planifiée sur un robot est un risque en soi." },
+    fin_mauvaise: { fin: "mauvais", bilan: "Le firmware du forum contenait une modification : le robot accepte désormais des commandes réseau sans authentification. N'importe qui sur le réseau peut le piloter." },
+  }}
+/>
+
+# Quiz
+
+<Quiz
+  questions={[
+    {
+      question: "Qu'est-ce qu'un firmware ?",
+      choix: ["Un antivirus", "Le logiciel embarqué qui pilote directement le matériel", "Un fichier de configuration Excel", "Une application mobile"],
+      bonne: 1,
+      explication: "Modifier le firmware, c'est modifier le comportement physique de la machine.",
+    },
+    {
+      question: "À quoi sert l'empreinte (hash) publiée par le constructeur ?",
+      choix: ["À accélérer l'installation", "À vérifier que le fichier n'a pas été modifié", "À activer la licence", "À rien, c'est décoratif"],
+      bonne: 1,
+      explication: "La moindre modification du fichier change complètement son empreinte.",
+    },
+    {
+      question: "D'où doit venir un firmware ?",
+      choix: ["D'un forum spécialisé réputé", "D'un collègue de confiance", "Du site ou du support officiel du constructeur", "De n'importe où, s'il porte le bon nom"],
+      bonne: 2,
+      explication: "La confiance dans une personne ne garantit pas l'intégrité d'un fichier.",
+    },
+    {
+      question: "Qu'a démontré Stuxnet ?",
+      choix: ["Qu'une attaque informatique peut détruire du matériel physique", "Que les automates sont impossibles à pirater", "Que les virus ne touchent que les PC", "Que les clés USB sont sûres"],
+      bonne: 0,
+      explication: "Stuxnet a endommagé des centrifugeuses en modifiant la logique des automates.",
+    },
+    {
+      question: "La mise à jour est vérifiée. Quand l'installer ?",
+      choix: ["Immédiatement, en pleine production", "Lors d'une intervention planifiée avec l'atelier, avec possibilité de retour arrière", "Jamais", "La nuit, sans prévenir personne"],
+      bonne: 1,
+      explication: "Planifier, sauvegarder la version précédente, tester : c'est aussi de la sécurité.",
+    },
+  ]}
+/>
+
+# Fiche réflexe
+
+<Fiche titre="Firmware : les 4 réflexes">
+1. **Source officielle uniquement** : site ou support du constructeur.
+2. **Vérifie l'empreinte SHA-256** avant toute installation.
+3. **Planifie l'intervention** et garde la version précédente pour revenir en arrière.
+4. **Un support inconnu ne touche pas une machine.**
+</Fiche>

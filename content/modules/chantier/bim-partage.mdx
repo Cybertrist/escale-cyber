@@ -1,0 +1,95 @@
+---
+titre: La maquette BIM partagée
+resume: Partager la maquette d'un bâtiment sensible, oui, mais comment ?
+duree: 12
+ordre: 1
+lab: camera-chantier
+---
+
+# Contexte
+
+Tu es conductrice ou conducteur de travaux sur la réhabilitation d'un bâtiment public à Lorient. Toute l'équipe travaille sur une **maquette BIM** : plans, réseaux, locaux techniques, contrôle d'accès, emplacement des caméras.
+
+Pour un attaquant, c'est une mine d'or : la maquette montre où sont les serveurs, par où passent les câbles, quelles portes sont contrôlées et comment. Or ces fichiers circulent entre des dizaines d'intervenants : architecte, bureaux d'études, sous-traitants, maître d'ouvrage.
+
+<Attention>
+Un lien de partage « toute personne disposant du lien » est un lien **public**. Il peut être transféré, indexé, ou retrouvé dans une boîte mail piratée.
+</Attention>
+
+# Simulation
+
+<Scenario
+  noeuds={{
+    debut: {
+      texte: "Un sous-traitant électricité te demande la maquette complète pour préparer son intervention. Il a besoin des plans des locaux techniques du rez-de-chaussée.",
+      choix: [
+        { label: "Je lui envoie un lien public vers la maquette complète, c'est le plus rapide", suivant: "public" },
+        { label: "Je lui donne un accès nominatif sur la plateforme BIM du projet, limité à son lot", suivant: "fin_bonne" },
+        { label: "J'exporte la maquette complète et je l'envoie en pièce jointe", suivant: "pj" },
+      ],
+    },
+    public: {
+      texte: "Le sous-traitant transfère le lien à son propre sous-traitant, qui le colle dans un forum pour poser une question technique.",
+      choix: [{ label: "Voir la suite", suivant: "fin_mauvaise" }],
+    },
+    pj: {
+      texte: "Le fichier fait 800 Mo. Le mail est refusé, alors le sous-traitant propose de le déposer sur son espace de stockage personnel gratuit.",
+      choix: [
+        { label: "D'accord, du moment qu'il l'a", suivant: "fin_mauvaise2" },
+        { label: "Non : je lui crée plutôt un accès limité sur la plateforme du projet", suivant: "fin_moyenne" },
+      ],
+    },
+    fin_bonne: { fin: "bon", bilan: "Accès nominatif, limité à ce dont il a besoin, révocable en fin de chantier et tracé. C'est le principe du moindre privilège." },
+    fin_moyenne: { fin: "moyen", bilan: "Tu as rattrapé le coup. Mais envoyer la maquette complète n'était pas nécessaire : il n'avait besoin que de son lot." },
+    fin_mauvaise: { fin: "mauvais", bilan: "Les plans du bâtiment, avec les locaux techniques et le contrôle d'accès, sont accessibles publiquement. Impossible de les « rappeler »." },
+    fin_mauvaise2: { fin: "mauvais", bilan: "La maquette complète dort maintenant sur un compte personnel que personne ne contrôle, et qui ne sera jamais supprimé." },
+  }}
+/>
+
+<LabLauncher lab="camera-chantier" />
+
+# Quiz
+
+<Quiz
+  questions={[
+    {
+      question: "Pourquoi une maquette BIM est-elle sensible ?",
+      choix: ["Parce qu'elle est lourde", "Parce qu'elle révèle l'organisation technique et de sûreté du bâtiment", "Parce qu'elle est en 3D", "Elle ne l'est pas"],
+      bonne: 1,
+      explication: "Locaux techniques, réseaux, contrôle d'accès : tout ce qu'il faut pour préparer une intrusion.",
+    },
+    {
+      question: "Qu'est-ce que le principe du moindre privilège ?",
+      choix: ["Donner à chacun uniquement l'accès dont il a besoin", "Donner les accès aux moins gradés", "Ne donner aucun accès", "Donner tous les accès pour aller plus vite"],
+      bonne: 0,
+      explication: "Si un compte est compromis, les dégâts se limitent à ce qu'il pouvait voir.",
+    },
+    {
+      question: "Un lien « toute personne disposant du lien » est…",
+      choix: ["Privé", "Public, en pratique", "Chiffré", "Valable 24h seulement"],
+      bonne: 1,
+      explication: "Quiconque récupère le lien, par transfert ou par une boîte mail piratée, accède aux fichiers.",
+    },
+    {
+      question: "En fin de chantier, que faire des accès des sous-traitants ?",
+      choix: ["Les laisser, ça peut resservir", "Les révoquer", "Les transférer au client", "Changer seulement les couleurs de la maquette"],
+      bonne: 1,
+      explication: "Un accès inutile est une porte ouverte qu'on oublie.",
+    },
+    {
+      question: "Un sous-traitant propose de stocker les plans sur son espace personnel gratuit. Tu…",
+      choix: ["Acceptes", "Refuses et proposes un accès sur la plateforme du projet", "Acceptes si le mot de passe est long", "Lui envoies par clé USB"],
+      bonne: 1,
+      explication: "Les données du projet restent sur les outils du projet, là où on contrôle qui y accède.",
+    },
+  ]}
+/>
+
+# Fiche réflexe
+
+<Fiche titre="Données de chantier : les 4 réflexes">
+1. **Pas de lien public** pour des plans ou une maquette.
+2. **Accès nominatif et limité au lot** de chaque intervenant.
+3. **Les fichiers restent sur la plateforme du projet**, jamais sur des espaces personnels.
+4. **On révoque les accès** en fin d'intervention.
+</Fiche>

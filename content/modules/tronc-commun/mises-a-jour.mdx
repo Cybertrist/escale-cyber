@@ -1,0 +1,83 @@
+---
+titre: Mises à jour
+resume: Pourquoi il ne faut pas les repousser.
+duree: 8
+ordre: 3
+---
+
+# Contexte
+
+Mai 2017 : le rançongiciel **WannaCry** paralyse en quelques heures plus de 200 000 ordinateurs dans 150 pays. Hôpitaux britanniques, usines automobiles, opérateurs ferroviaires : tous touchés.
+
+Le correctif qui bloquait l'attaque était disponible depuis **deux mois**. Les machines touchées ne l'avaient simplement pas installé.
+
+Une mise à jour de sécurité, c'est une faille connue qui se referme. Tant qu'elle n'est pas installée, la faille est connue… des attaquants aussi.
+
+<Astuce>
+Sur un équipement industriel, on ne met pas à jour n'importe quand : la mise à jour se planifie avec l'exploitation. Mais elle se planifie, elle ne s'oublie pas.
+</Astuce>
+
+# Simulation
+
+<Scenario
+  noeuds={{
+    debut: {
+      texte: "Vendredi 17h45. Ton ordinateur affiche : « Mise à jour de sécurité critique disponible. Redémarrage nécessaire (environ 10 minutes) ». Tu dois partir à 18h.",
+      choix: [
+        { label: "Je lance la mise à jour et je laisse le PC redémarrer en partant", suivant: "fin_bonne" },
+        { label: "Je clique « Me le rappeler dans 7 jours »", suivant: "report" },
+        { label: "Je désactive les mises à jour automatiques, elles tombent toujours au mauvais moment", suivant: "fin_mauvaise" },
+      ],
+    },
+    report: {
+      texte: "Mercredi suivant, un mail piégé arrive. La pièce jointe exploite précisément la faille que la mise à jour corrigeait.",
+      choix: [
+        { label: "J'ouvre la pièce jointe sans me méfier", suivant: "fin_mauvaise2" },
+        { label: "Je trouve le mail étrange et je le signale", suivant: "fin_moyenne" },
+      ],
+    },
+    fin_bonne: { fin: "bon", bilan: "Dix minutes de patience, et la faille est refermée avant que quiconque puisse l'exploiter." },
+    fin_moyenne: { fin: "moyen", bilan: "Ton réflexe face au mail t'a sauvé. Mais tu as laissé la porte ouverte une semaine : installe la mise à jour maintenant." },
+    fin_mauvaise: { fin: "mauvais", bilan: "Ton poste accumule les failles connues. C'est exactement le profil de machine que cherchent les rançongiciels." },
+    fin_mauvaise2: { fin: "mauvais", bilan: "Le poste est compromis via une faille corrigée depuis une semaine. L'attaque se propage au réseau." },
+  }}
+/>
+
+# Quiz
+
+<Quiz
+  questions={[
+    {
+      question: "Que corrige une mise à jour de sécurité ?",
+      choix: ["Uniquement l'apparence du logiciel", "Une faille connue qui peut être exploitée", "La vitesse de l'ordinateur", "Rien, c'est surtout commercial"],
+      bonne: 1,
+      explication: "Une fois le correctif publié, les attaquants étudient ce qu'il corrige pour attaquer ceux qui ne l'ont pas installé.",
+    },
+    {
+      question: "Pourquoi WannaCry a-t-il fait autant de dégâts en 2017 ?",
+      choix: ["Il n'existait aucune protection", "Le correctif existait mais n'avait pas été installé", "Il se transmettait par clé USB uniquement", "Il visait seulement les particuliers"],
+      bonne: 1,
+      explication: "Le correctif était sorti deux mois avant. Les organisations touchées ne l'avaient pas déployé.",
+    },
+    {
+      question: "Sur un automate de production, la bonne pratique est…",
+      choix: ["De ne jamais le mettre à jour", "De le mettre à jour immédiatement en pleine production", "De planifier la mise à jour avec l'exploitation et de la tester", "De laisser le fournisseur s'en charger à distance sans prévenir"],
+      bonne: 2,
+      explication: "En industrie, on planifie et on teste, mais on ne laisse pas une faille ouverte indéfiniment.",
+    },
+    {
+      question: "Un logiciel n'est plus maintenu par son éditeur (fin de support). Que faire ?",
+      choix: ["Continuer à l'utiliser normalement", "Prévoir son remplacement et l'isoler du réseau en attendant", "Désinstaller l'antivirus", "Rien, il fonctionne encore"],
+      bonne: 1,
+      explication: "Plus aucune faille ne sera corrigée. Il faut le remplacer et, en attendant, limiter son exposition.",
+    },
+  ]}
+/>
+
+# Fiche réflexe
+
+<Fiche titre="Mises à jour : les 3 réflexes">
+1. **Installe les mises à jour de sécurité sans attendre** sur ton poste et ton téléphone.
+2. **En industrie, planifie-les** avec l'exploitation, mais ne les oublie pas.
+3. **Signale les logiciels en fin de support** : ils doivent être remplacés.
+</Fiche>

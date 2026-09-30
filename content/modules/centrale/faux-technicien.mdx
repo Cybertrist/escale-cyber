@@ -1,0 +1,115 @@
+---
+titre: Le faux technicien
+resume: Un prestataire te demande un accès à distance à la supervision.
+duree: 15
+ordre: 2
+lab: automate-pompage
+---
+
+# Contexte
+
+Lundi, 8h50. Tu es ingénieure d'exploitation à la station de pompage de Kerlann, qui alimente plusieurs communes en eau. Les automates sont fournis par un constructeur, la maintenance est assurée par des prestataires.
+
+Les attaquants le savent : dans l'industrie, **les prestataires ont souvent plus d'accès que les salariés**. Se faire passer pour l'un d'eux est l'un des moyens les plus efficaces d'entrer.
+
+<Astuce>
+Une intervention de prestataire est toujours **annoncée par ta hiérarchie** ou planifiée dans la GMAO. Un technicien qui arrive « de nulle part » se vérifie avant tout.
+</Astuce>
+
+# Simulation
+
+Trois mails t'attendent. Ouvre chacun d'eux et décide : tu le signales, ou tu le traites normalement ?
+
+<FausseBoiteMail
+  boite="station-kerlann"
+  mails={[
+    {
+      de: "Automatis Industrie",
+      adresse: "support@automatis-lndustrie.com",
+      heure: "08:47",
+      objet: "URGENT : mise à jour firmware de vos automates",
+      corps: "Bonjour,\n\nUne faille critique a été détectée sur la gamme d'automates PX-200 installée dans votre station. Pour éviter un arrêt de production, installez le correctif ci-dessous avant 17h aujourd'hui.\n\nPassé ce délai, notre support ne pourra plus garantir le fonctionnement de vos équipements.\n\nL'équipe support Automatis",
+      bouton: "Télécharger le correctif v4.2",
+      phishing: true,
+      indices: [
+        "Le domaine est usurpé : « lndustrie » s'écrit avec un L minuscule à la place du i.",
+        "L'urgence est artificielle : « avant 17h », « plus de garantie ».",
+        "Un correctif d'automate ne s'installe jamais depuis un lien reçu par mail. Il passe par la maintenance.",
+      ],
+    },
+    {
+      de: "Marc Durand",
+      adresse: "m.durand@station-kerlann.fr",
+      heure: "07:58",
+      objet: "Planning d'astreinte semaine 47",
+      corps: "Salut Louise,\n\nComme chaque mois, voici le planning d'astreinte de la semaine 47. Tu es de permanence mardi et jeudi soir. Si tu veux échanger un créneau, vois directement avec Karim.\n\nLe planning complet est affiché au poste de supervision.\n\nMarc\nChef d'exploitation",
+      phishing: false,
+      indices: [
+        "L'adresse vient du domaine de l'entreprise et d'un collègue connu.",
+        "Aucun lien, aucune pièce jointe, aucune demande sensible.",
+        "Le contenu correspond aux échanges habituels de l'équipe.",
+      ],
+    },
+    {
+      de: "Thomas Leroy · TéléSupport",
+      adresse: "t.leroy@telesupport-scada.net",
+      heure: "Hier",
+      objet: "Intervention à distance ce soir sur la supervision",
+      corps: "Bonjour,\n\nJe suis le nouveau technicien chargé de la maintenance de votre supervision. Une intervention est prévue ce soir à 22h.\n\nMerci d'installer l'outil de prise en main à distance et de me transmettre l'identifiant et le mot de passe affichés. Sans intervention cette semaine, la garantie constructeur ne s'appliquera plus.\n\nCordialement,\nThomas",
+      phishing: true,
+      indices: [
+        "Ce prestataire n'a jamais été annoncé par ta hiérarchie.",
+        "Il demande un accès distant à la supervision : c'est la porte d'entrée d'une attaque sur l'installation.",
+        "La menace sur la garantie sert à te faire agir sans vérifier. Appelle ton responsable avant tout.",
+      ],
+    },
+  ]}
+/>
+
+# Quiz
+
+<Quiz
+  questions={[
+    {
+      question: "Un « nouveau technicien » te demande d'installer un outil de prise en main à distance. Tu…",
+      choix: ["L'installes, il a l'air de connaître le matériel", "Vérifies auprès de ta hiérarchie que l'intervention est prévue", "Lui envoies les identifiants par SMS plutôt que par mail", "Lui demandes son numéro et l'appelles"],
+      bonne: 1,
+      explication: "Son numéro peut être celui de l'escroc. C'est ta hiérarchie qui sait si l'intervention existe.",
+    },
+    {
+      question: "Dans « support@automatis-lndustrie.com », qu'est-ce qui cloche ?",
+      choix: ["Rien", "Le « l » minuscule à la place du « i » dans industrie", "Le « .com »", "Le mot support"],
+      bonne: 1,
+      explication: "C'est du typosquatting : un domaine enregistré pour ressembler au vrai.",
+    },
+    {
+      question: "Pourquoi les attaquants se font-ils passer pour des prestataires ?",
+      choix: ["Parce que les prestataires ont souvent des accès étendus aux installations", "Parce que c'est plus drôle", "Parce que les prestataires n'ont pas d'ordinateur", "Par hasard"],
+      bonne: 0,
+      explication: "Télémaintenance, comptes génériques, accès physiques : autant de portes d'entrée.",
+    },
+    {
+      question: "Un correctif pour vos automates arrive par mail. La bonne démarche ?",
+      choix: ["Cliquer sur le lien du mail", "Le transmettre à la maintenance, qui le récupère sur le site officiel et planifie", "L'installer le soir pour ne pas gêner", "L'ignorer définitivement"],
+      bonne: 1,
+      explication: "Les vrais correctifs existent aussi : ils passent simplement par le bon circuit.",
+    },
+    {
+      question: "Tu as un doute sur un mail mais tu n'en es pas sûre. Tu…",
+      choix: ["Le supprimes", "Le signales : c'est à l'équipe sécurité de trancher", "Cliques pour voir", "Le transfères à tes collègues pour avoir leur avis"],
+      bonne: 1,
+      explication: "Un signalement de trop ne coûte rien. Transférer un mail piégé, c'est multiplier les victimes potentielles.",
+    },
+  ]}
+/>
+
+<LabLauncher lab="automate-pompage" />
+
+# Fiche réflexe
+
+<Fiche titre="Prestataires : les 4 réflexes">
+1. **Une intervention est annoncée** par ta hiérarchie ou planifiée. Sinon, on vérifie.
+2. **Jamais d'identifiants transmis** par mail, SMS ou téléphone.
+3. **Aucun outil installé** à la demande d'un inconnu.
+4. **Au moindre doute, on signale.**
+</Fiche>
